@@ -161,7 +161,7 @@ app.use(cors())
     })
 
         // Sets up the path where your static files are
-        var publicPath = path.resolve(__dirname,  "assets");
+        var publicPath = path.resolve(__dirname,  "images");
         // Sends static files from the publicPath directory
         app.use(express.static(publicPath));
         app.use(function(request, response) {
