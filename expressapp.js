@@ -17,7 +17,25 @@ const MongoClient = require('mongodb').MongoClient;
 let db
 MongoClient.connect('mongodb+srv://User2022:17102000Gur@cluster0.q3gsm.mongodb.net/testing', (err, client) => {
     db = client.db('testing')
+
 })
+    app.use(
+        function
+            (
+                req, res, next
+            )
+        {
+
+            res.header(
+                "Access-Control-Allow-Origin"
+                ,
+                "*"
+            );
+            res.header(
+                "Access-Control-Allow-Headers"
+                ,
+                "*"
+            ); next(); });
 app.use(function (req, res, next) {
     console.log("Request IP: " + req.url);
     console.log("Request date: " + new Date());
