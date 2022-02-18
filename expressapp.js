@@ -65,18 +65,13 @@ app.use(cors())
 
         app.get("/Search/:collectionName/*", function(req, res) {
             console.log("Performed a search query")
-            //Parse the URL
-            var urlObj = url.parse(req.url, true);
+            
+            var queries = url.parse(req.url, true).query;
 
-            //Extract object containing queries from URL object.
-            var queries = urlObj.query;
-
-            //Get the pagination properties if they have been set. Will be  undefined if not set.
             var searchTerm = queries['search'];
 
             if (searchTerm) {
                 console.log(searchTerm)
-               // let regex = '/^' + searchTerm + '/';
 
               if (!isNaN(searchTerm)){
 
@@ -84,7 +79,6 @@ app.use(cors())
                       { "id":  parseInt(searchTerm)}
                   )
                       .toArray((e, results) => {
-                          //console.log(results)
                           if (e) return next(e)
                           res.send(results)
                       })
@@ -97,7 +91,6 @@ app.use(cors())
                           { "location": { $regex: regexx }}
                       ]})
                       .toArray((e, results) => {
-                          //console.log(results)
                           if (e) return next(e)
                           res.send(results)
                       })
@@ -111,14 +104,12 @@ app.use(cors())
 
 
         app.post('/collection/:collectionName', (req, res, next) => {
-          //  console.log(req.body.test)
             console.log("Received POST Request")
 
             req.collection.insert(req.body, (e, results) => {
                 if (e) {
                     return next(e)
                 }
-                //res.send(results)
             })
     })
 
@@ -147,7 +138,6 @@ app.use(cors())
             multi: false
         }, (e, result) => {
             console.log(result)
-            // console.log(result.matchedCount)
             if (e) {
 
                 return next(e)
@@ -160,9 +150,8 @@ app.use(cors())
         })
     })
 
-        // Sets up the path where your static files are
         var publicPath = path.resolve(__dirname,  "images");
-        // Sends static files from the publicPath directory
+
         app.use(express.static(publicPath));
         app.use(function(request, response) {
             response.writeHead(404, {
