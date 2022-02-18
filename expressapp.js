@@ -6,7 +6,7 @@ var fs = require("fs");
 const { ObjectId } = require('mongodb');
 
 app.use(express.json())
-   
+
 
 
 const MongoClient = require('mongodb').MongoClient;
@@ -63,7 +63,7 @@ app.post('/collection/:collectionName', (req, res, next) => {
     })
 })
 app.put('/collection/:collectionName/:id', (req, res, next) => {
-    req.collection.update(
+    req.collection.updateOne(
         { _id: new ObjectId(req.params.id) },
         { $set: req.body },
         { safe: true, multi: false },
@@ -78,20 +78,20 @@ app.use(function (req, res, next) {
     var filePath = path.join(__dirname, "images", req.url);
     // Built-in fs.stat gets info about a file
     fs.stat(filePath, function (err, fileInfo) {
-       
+
         if (err) {
-           if (err.code === 'ENOENT') {
+            if (err.code === 'ENOENT') {
                 res.statusCode = 404;
-            res.end('File not found')
-           }
-           
+                res.end('File not found')
+            }
+
             next();
             return;
-        } 
+        }
         if (fileInfo.isFile()) res.sendFile(filePath);
         else next();
     });
 });
-app.listen(3000, function () {
-    console.log("App started on port 3000");
-});
+
+const port = process.env.PORT ||3000
+app.listen(port)
