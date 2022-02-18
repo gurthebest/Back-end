@@ -92,7 +92,47 @@ app.use(function (req, res, next) {
         else next();
     });
 });
+app.get("/search/:collectionName/*", function(req, res) {
+    console.log("Search function ...")
+
+    var urlo = url.parse(req.url, true).query;
+    var searchWord = queries['search'];
+
+    if (searchWord) {
+        console.log(searchWord)
+
+      if (!isNaN(searchWord)){
+
+          req.collection.find(
+              { "id":  parseInt(searchWord)}
+          )
+              .toArray((e, results) => {
+
+                if (e) return next(e)
+                  res.send(results)
+              })
+      } else {
+          console.log("the number is't an intiger")
+          
+          var regexx = new RegExp('^' + searchWord );
+
+          req.collection.find({ $or: [
+                  { "subject": { $regex: regexx}},
+                  { "location": { $regex: regexx }}
+              ]})
+              .toArray((e, results) => {
+                
+                  if (e) return next(e)
+                  res.send(results)
+              })
+      }
+
+
+
+    }
+
+});
 const port = process.env.PORT ||3000
 app.listen(port, function () {
-    console.log("App started on port"+port);
+    console.log("App started on port "+port);
 })
