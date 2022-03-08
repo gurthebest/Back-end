@@ -73,17 +73,7 @@ app.use(cors())
             if (searchTerm) {
                 console.log(searchTerm)
 
-              if (!isNaN(searchTerm)){
-
-                  req.collection.find(
-                      { "id":  parseInt(searchTerm)}
-                  )
-                      .toArray((e, results) => {
-                          if (e) return next(e)
-                          res.send(results)
-                      })
-              } else {
-                  console.log("number is NOT integer")
+          
                   var regexx = new RegExp('^' + searchTerm );
 
                   req.collection.find({ $or: [
@@ -94,7 +84,7 @@ app.use(cors())
                           if (e) return next(e)
                           res.send(results)
                       })
-              }
+              
 
 
 
